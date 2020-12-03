@@ -8,10 +8,10 @@ def get_mode():
     while True:
         print('Do you wish to encrypt or decrypt a message?')
         mode = input().lower()
-        if mode in ['encrypt', 'e', 'decrypt', 'd']:
+        if mode in ['encrypt', 'e', 'decrypt', 'd', 'brute', 'b']:
             return mode
         else:
-            print('Enter either "encrypt" or "e" or "decrypt" or "d".')
+            print('Enter either "encrypt" or "e" or "decrypt" or "d" or "brute" or "b".')
 
 
 def get_message():
@@ -54,7 +54,12 @@ def get_translated_message(mode, message, key):
 
 mode = get_mode()
 message = get_message()
-key = get_key()
+if mode[0] != 'b':
+    key = get_key()
 
 print('Your translated text is:')
-print(get_translated_message(mode, message, key))
+if mode[0] != 'b':
+    print(get_translated_message(mode, message, key))
+else:
+    for key in range(1, MAX_KEY_SIZE + 1):
+        print(key, get_translated_message('decrypt', message, key))
