@@ -24,6 +24,11 @@ def get_new_board():
 
 
 def draw_board(board):
+    """Draw the board data structure
+
+    Args:
+        board (list): list of coords of chests and sonar devices
+    """
     # Inital space for the numbers down the left side of the board
     tens_digits_line = '    '
     for i in range(1, 6):
@@ -56,6 +61,14 @@ def draw_board(board):
 
 
 def get_random_chests(num_chests):
+    """Creates randomly located chests on game board
+
+    Args:
+        num_chests (int): number of chests a player needs to find
+
+    Returns:
+        list: List of chests for player to find
+    """
     # Create a list of chest data structures (two-item liists of x, y int coords)
     chests = []
     while len(chests) < num_chests:
@@ -68,14 +81,33 @@ def get_random_chests(num_chests):
 
 
 def is_on_board(x, y):
+    """Determines if coords are on the game board
+
+    Args:
+        x (int): coords on the x-axis of the board
+        y (int): coords on the y-axis of the board
+
+    Returns:
+        bool: Return true if the coords are on the board, otherwise false
+    """
     # Return true if the coords are on the board, otherwise false
     return x >= 0 and x <= 59 and y >= 0 and y <= 14
 
 
 def make_move(board, chests, x, y):
-    # Change the board data structure with a sonar device character.  Remove treasure chests from the chests list as they are found
-    # Return False if this is an invalid move.
-    # Otherwise, return the string of the result of this move.
+    """Chanage the board data structure with a sonar device character.
+    Remove treasure chests from the chests list as they are found.
+
+    Args:
+        board (list): list of coords of chests and sonar devices
+        chests (list): List of chests for player to find
+        x (int): coords on the x-axis of the board
+        y (int): coords on the y-axis of the board
+
+    Returns:
+        Return False if this is an invalid move. Otherwise, return the string of the result of this move.
+    """
+    # Any chest will be closer than 100.
     smallest_distance = 100
     for cx, cy in chests:
         distance = math.sqrt((cx - x) * (cx - x) + (cy - y) * (cy - y))
@@ -100,7 +132,14 @@ def make_move(board, chests, x, y):
 
 
 def enter_player_move(previous_moves):
-    # Let the player enter their move.  Return a two-item list of int xy coords.
+    """Let the player enter their move.  Return a two-item list of int xy coords.
+
+    Args:
+        previous_moves (list): List of previous moves by player
+
+    Returns:
+        list: two item list of xy coords
+    """
     print('Where do you want to drop the next sonar device? (0-59 0-14) (or type quit)')
     while True:
         move = input()
@@ -119,6 +158,8 @@ def enter_player_move(previous_moves):
 
 
 def show_instructions():
+    """Creates on screen instructions for player if requested
+    """
     print('''Instructions:
     You are the captain of the Simon, a treasure-hunting ship.  Your current mission is
     to use sonar devices to find three sunken treasure chests at the bottom of the ocean.
@@ -184,7 +225,7 @@ while True:
     previous_moves = []
 
     while sonar_devices > 0:
-        # Show sonar devices and chest statuses
+            # Show sonar devices and chest statuses
         print(
             f'You have {sonar_devices} sonar device(s) left.  {len(the_chests)} treasure chest(s) remaining.')
 
@@ -196,7 +237,7 @@ while True:
         if move_result == False:
             continue
         else:
-            if move_result == 'You have found a sunken treausre chest!':
+            if move_result == 'You have found a sunken treasure chest!':
                 # Update all sonar devices currently on the map.
                 for x, y in previous_moves:
                     make_move(the_board, the_chests, x, y)
