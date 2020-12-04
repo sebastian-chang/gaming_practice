@@ -1,5 +1,4 @@
 # Reversegam: a clone of Othello/REversi
-
 import random
 import sys
 
@@ -8,7 +7,11 @@ HEIGHT = 8
 
 
 def draw_board(board):
-    # Print the board passed to this function.  Return none.
+    """Draws the board given the data from "board"
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+    """
     print('  12345678')
     print(' +--------+')
     for y in range(HEIGHT):
@@ -22,7 +25,11 @@ def draw_board(board):
 
 
 def get_new_board():
-    # Create a brand-new, blank board data structure.
+    """Create a brand-new, blank board data structure.
+
+    Returns:
+        list: blank board data structure
+    """
     board = []
     for i in range(WIDTH):
         board.append([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '])
@@ -30,6 +37,14 @@ def get_new_board():
 
 
 def get_board_copy(board):
+    """Creates a copy of passed "board"
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+
+    Returns:
+        list: Copy of board data structure
+    """
     # Make a duplicate of the board list and return it.
     board_copy = get_new_board()
     for x in range(WIDTH):
@@ -40,8 +55,18 @@ def get_board_copy(board):
 
 
 def is_valid_move(board, tile, x_start, y_start):
-    # Return False if the player's move on space xstart, ystart is invalid.
-    # If it is a valid move, return a list of spaces that would become the player's if they made a move here.
+    """Checks to see if move is valid
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        tile (string): String of character to be placed on board
+        x_start (int): x coordinates
+        y_start (int): y coordinates
+
+    Returns:
+        If it is a valid move, return a list of spaces that would become the player's if they made a move here.
+        Return False if the player's move on space xstart, ystart is invalid.
+    """
     test = is_on_corner(x_start, y_start)
     if board[x_start][y_start] != ' ' or not is_on_board(x_start, y_start):
         return False
@@ -79,7 +104,15 @@ def is_valid_move(board, tile, x_start, y_start):
 
 
 def get_valid_moves(board, tile):
-    # Return a list of [x, y] lists of valid moves for the given player on the given board.
+    """Gets a list of valid moves
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        tile (string): String of character to be placed on board
+
+    Returns:
+        list: lists of valid moves for the given player on the given board
+    """
     valid_moves = []
     for x in range(WIDTH):
         for y in range(HEIGHT):
@@ -90,12 +123,29 @@ def get_valid_moves(board, tile):
 
 
 def is_on_board(x, y):
+    """Checks to see if coordinates are on the board
+
+    Args:
+        x (int): x coordinates
+        y (int): y coordinates
+
+    Returns:
+        bool: Return True if the coordinates are located on the board.
+    """
     # Return True if the coordinates are located on the board.
     return x >= 0 and x <= WIDTH - 1 and y >= 0 and y <= HEIGHT - 1
 
 
 def get_board_with_valid_moves(board, tile):
-    # Return a new board with periods making the valid moves the player can make.
+    """Gets board with all valid moves
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        tile (string): String of character to be placed on board
+
+    Returns:
+        Return a new board with periods making the valid moves the player can make.
+    """
     board_copy = get_board_copy(board)
 
     for x, y in get_valid_moves(board_copy, tile):
@@ -105,7 +155,14 @@ def get_board_with_valid_moves(board, tile):
 
 
 def get_score_of_board(board):
-    # Determine the score by counting the tiles.  Return a dictionary with keys 'X' and 'O'.
+    """Determine the score by counting the tiles
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+
+    Returns:
+        dict: A dictionary with keys 'X' and 'O'
+    """
     x_score = 0
     o_score = 0
     for x in range(WIDTH):
@@ -119,8 +176,11 @@ def get_score_of_board(board):
 
 
 def enter_player_tile():
-    # Let the player enter which tile they want to be.
-    # Return a list with the player's tile as the first item and the computer's tile as the second.
+    """Get what tile player wants to use
+
+    Returns:
+        list: Return a list with the player's tile as the first item and the computer's tile as the second.
+    """
     tile = ''
     while not (tile == 'X' or tile == 'O'):
         print('Do you want to be X or O?')
@@ -134,7 +194,11 @@ def enter_player_tile():
 
 
 def who_goes_first():
-    # Randomly choose who goes first.
+    """Randomly chooses who goes first
+
+    Returns:
+        string: Player who goes first
+    """
     if random.randint(0, 1) == 0:
         return 'computer'
     else:
@@ -142,8 +206,17 @@ def who_goes_first():
 
 
 def make_move(board, tile, x_start, y_start):
-    # Place the tile on the board at xstart, ystart and flip any of the opponents's pieces.
-    # Return Flase if this is an invalid move; True if it is valid.
+    """Place the tile on the board at xstart, ystart and flip any of the opponents's pieces
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        tile (string): String of character to be placed on board
+        x_start (int): x coordinates
+        y_start (int): y coordinates
+
+    Returns:
+        bool: Return Flase if this is an invalid move; True if it is valid
+    """
     tiles_to_flip = is_valid_move(board, tile, x_start, y_start)
 
     if tiles_to_flip == False:
@@ -157,13 +230,28 @@ def make_move(board, tile, x_start, y_start):
 
 
 def is_on_corner(x, y):
-    # Return True if the position is in one of the four corners.
+    """Checks to see if move is in the corner of board
+
+    Args:
+        x (int): x coordinates
+        y (int): y coordinates
+
+    Returns:
+        bool: Return True if the position is in one of the four corners
+    """
     return (x == 0 or x == WIDTH - 1) and (y == 0 or y == HEIGHT - 1)
 
 
 def get_player_move(board, player_tile):
-    # Let the player enter their move.
-    # Return the move as [x, y] (or return the strings 'hints' or 'quit')
+    """Let the player enter their move
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        player_tile (string): string of players tile
+
+    Returns:
+        Return the move as [x, y] (or return the strings 'hints' or 'quit')
+    """
     DIGITS_1_TO_8 = '1 2 3 4 5 6 7 8'.split()
     while True:
         print('Enter your move, "quit" to end the game, or "hints" to toggle hints.')
@@ -186,7 +274,15 @@ def get_player_move(board, player_tile):
 
 
 def get_computer_move(board, cpu_tile):
-    # Given a board and the computer's tile, determine where to move and return that as an [x, y] list.
+    """[summary]
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        cpu_tile (string): string of computers tile
+
+    Returns:
+        list: Return the move as [x, y]
+    """
     possible_moves = get_valid_moves(board, cpu_tile)
     # Randomize the order of the moves.
     random.shuffle(possible_moves)
@@ -210,12 +306,28 @@ def get_computer_move(board, cpu_tile):
 
 
 def print_score(board, player_tile, cpu_tile):
+    """Prints the current score of passed "board"
+
+    Args:
+        board (list): list of data coordinates of board and pieces on board
+        player_tile (string): string of players tile
+        cpu_tile (string): string of computers tile
+    """
     score = get_score_of_board(board)
     print(
         f'You: {score[player_tile]} points.  Computer {score[cpu_tile]} points.')
 
 
 def play_game(player_tile, cpu_tile):
+    """Main game function.  Runs all helper functions from hiere
+
+    Args:
+        player_tile (string): string of players tile
+        cpu_tile (string): string of computers tile
+
+    Returns:
+        Returns a board after a player has made its move
+    """
     show_hints = False
     turn = who_goes_first()
     print(f'The {turn} will go first.')
